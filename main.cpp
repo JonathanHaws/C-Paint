@@ -2,11 +2,12 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <windows.h>
 
 double mouseScroll = 0.0;
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) { mouseScroll += yoffset;}
 
-int main() {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
     #pragma region Creating Window
         if (!glfwInit()) { std::cout << "Failed to initialize GLFW" << std::endl; return -1;}
@@ -140,7 +141,7 @@ int main() {
             if (mouseScroll != 0) {
                 float oldZoom = zoom;
                 zoom += mouseScroll * 0.2f * zoom;
-                zoom = std::max(0.1f, zoom); // Prevent zoom from going negative
+                if( zoom < 0.1f){ zoom = 0.1f; }
                 mouseScroll = 0;
                 canvasX -= (mouseX / oldZoom) - (mouseX / zoom);
                 canvasY -= (mouseY / oldZoom) - (mouseY / zoom);
